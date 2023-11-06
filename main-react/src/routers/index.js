@@ -2,6 +2,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
+  redirect
 } from "react-router-dom";
 
 
@@ -17,16 +18,10 @@ export const routerJsx = createBrowserRouter(
     <Route path="/" element={<Root />}>
       <Route path="/contact" element={<Contact />} />
       <Route
-        path="/project"
+        path="/project/:name/:age"
         element={<Project />}
       />
     </Route>
-  )
-) 
-
-export const lll = createBrowserRouter(
-  createRoutesFromElements(
-    <Route  path="/aaaa" element={<div>Nihao</div>}/>
   )
 ) 
 
@@ -37,19 +32,34 @@ export const routerObj = createBrowserRouter([
     path: "/",
     element: <Root />,
     errorElement: <ErrorPage />,
+    index: true, // 加载默认模块
+    caseSensitive: true, // 是否匹配大小写
     children: [
       {
-        path: "/contact/*?",
+        path: "contact/*",
         element: <Contact />,
-        // // 使用 useParams、useLoaderData 在组件内获取参数
-        // loader: params(),
-        // // 使用 useMatch 在组件内获取参数
-        // action: params(),
+        // 渲染之前加载数据
+        loader: ({params, request})=>{
+          fetch("/api/dashboard.json", {
+            signal: request?.signal,
+          })
+          return {};
+        },
+        // 提交表单时触发、 redirect 路径 
+        action: ({params, request})=>{
+          console.log('重定向');
+          return redirect('/project/lisi/16')
+        }
       },
-      // projects/:projectId/tasks/:taskId
       {
-        path: "/project",
-        element: <Project />
+        // projects/:projectId/tasks/:taskId
+        path: "project/:name/:age",
+        element: <Project />,
+        loader: ({params, request})=>{
+          console.log('获取 namge、age参数');
+          return params;
+        },
+        action: ({params, request})=>params
       }
     ],
   },
@@ -64,15 +74,13 @@ export const routerObj = createBrowserRouter([
 // 3、组件形式
 const routes = ()=>{
   return (
-    <>
+    // 根组建
     <Route path="/" element={<Root />}>
-      <Route path="/contact/*?" element={<Contact />} />
-      <Route
-        path="/project"
-        element={<Project />}
+      {/* 使用 '*' 允许子组件直接使用 Routes-Route 进行嵌套子路由 */}
+      <Route path="contact/*" element={<Contact />} />
+      <Route path="project/:name/:age" element={<Project />}
       />
     </Route>
-    </>
   )
 }
 export default routes;

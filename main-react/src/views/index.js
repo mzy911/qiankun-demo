@@ -8,7 +8,7 @@ const Root = ()=>{
       <span>&nbsp;</span>
       <Link to='/contact'>Contact</Link>
       <span>&nbsp;</span>
-      <Link to='/project'>Project</Link>
+      <Link to='/project/zhangsan/18'>Project</Link>
 
 
       {/* 插入子模块 */}

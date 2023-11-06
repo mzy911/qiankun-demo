@@ -6,17 +6,16 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import routes, {
-  router,
   routerJsx,
   routerObj
 } from './routers'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  // 1、结合 createBrowserRouter 使用
+  // 1、结合 createBrowserRouter 使用：routerJsx、routerObj
   <RouterProvider router={routerObj}></RouterProvider>  
 
-  // 2、直接返回 route
+  // 2、直接嵌套 route 结构
   // <BrowserRouter>
   //   <Routes>{routes()}</Routes>
   // </BrowserRouter>
